@@ -1061,11 +1061,14 @@ int moloch_nids_next_file()
             return moloch_nids_next_file();
         }
         offlineFile = pcap_file(nids_params.pcap_desc);
-
-        if (!realpath(fullfilename, offlinePcapFilename)) {
-            LOG("ERROR - pcap open failed - Couldn't realpath file: '%s' with %d", fullfilename, errno);
-            exit(1);
-        }
+	
+	if (fullfilename[0] != '-' && fullfilename[1] != '\0')
+	{
+            if (!realpath(fullfilename, offlinePcapFilename)) {
+                LOG("ERROR - pcap open failed - Couldn't realpath file: '%s' with %d", fullfilename, errno);
+                exit(1);
+            }
+	}
 
         moloch_nids_pcap_opened();
         return 1;
